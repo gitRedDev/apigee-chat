@@ -1,0 +1,5 @@
+mcp==1.9.3
+httpx==0.28.1
+google-auth==2.40.3
+google-auth-httplib2==0.2.0
+python-dotenv==1.1.0

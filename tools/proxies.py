@@ -1,6 +1,6 @@
 from typing import Any
 
-from client import apigee_get
+from client import apigee_get, apigee_post, apigee_delete
 
 
 async def list_proxies() -> list[dict[str, Any]]:
@@ -67,3 +67,12 @@ async def get_proxy_details(
         "description": rev_meta.get("description", ""),
         "type": rev_meta.get("type", ""),
     }
+
+
+async def list_proxy_policies(proxy_name: str, revision: str | None = None) -> list[str]:
+    if revision is None:
+        meta = await apigee_get(f"/apis/{proxy_name}")
+        revisions: list[str] = meta.get("revision", [])
+        revision = str(max(int(r) for r in revisions)) if revisions else "1"
+    data = await apigee_get(f"/apis/{proxy_name}/revisions/{revision}/policies")
+    return data if isinstance(data, list) else data.get("policy", [])
